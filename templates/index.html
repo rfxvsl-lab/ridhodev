@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ridho - Interactive Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Menggunakan warna dasar Stone (Coklat Keabuan) yang hangat */
+        body { margin: 0; background-color: #1c1917; color: #f5f5f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+        
+        #visualizer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.25; }
+        
+        /* Efek Kaca yang lebih soft */
+        .glass { 
+            background: rgba(41, 37, 36, 0.6); 
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 244, 224, 0.08); 
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1c1917; }
+        ::-webkit-scrollbar-thumb { background: #d97706; border-radius: 10px; }
+
+        /* Glow yang hangat (Earthy) */
+        .icon-glow-amber { text-shadow: 0 0 15px rgba(217, 119, 6, 0.5); }
+        .icon-glow-rose { text-shadow: 0 0 15px rgba(225, 29, 72, 0.5); }
+        .icon-glow-teal { text-shadow: 0 0 15px rgba(13, 148, 136, 0.5); }
+        .icon-glow-stone { text-shadow: 0 0 15px rgba(168, 162, 158, 0.5); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <canvas id="visualizer"></canvas>
+
+    <nav class="fixed top-0 w-full z-50 glass border-b border-stone-800 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 font-black tracking-widest text-xl bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-rose-400">
+                    <i class="fa-solid fa-code mr-2 text-amber-500"></i>RIDHO.Dev
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="hover:text-amber-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fa-solid fa-house mr-1"></i> Home</a>
+                        <a href="#about" class="hover:text-amber-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fa-solid fa-layer-group mr-1"></i> Expertise</a>
+                        <a href="#projects" class="hover:text-amber-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fa-solid fa-briefcase mr-1"></i> Works</a>
+                        <a href="#lab" class="hover:text-amber-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"><i class="fa-solid fa-headphones mr-1"></i> Audio Lab</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="min-h-screen flex items-center justify-center pt-16 px-4">
+        <div class="text-center glass p-8 md:p-16 rounded-3xl max-w-3xl shadow-2xl border border-stone-700/50 relative overflow-hidden group">
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-600/10 to-rose-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            
+            <h1 class="text-5xl md:text-7xl font-black mb-4 tracking-tight text-stone-100">
+                Creative <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-rose-400">Developer</span>
+            </h1>
+            <p class="text-base md:text-xl text-stone-400 mb-8 leading-relaxed font-light px-2">
+                Membangun pengalaman digital yang hidup. Dari pengembangan SaaS yang kompleks, eksekusi live streaming event, hingga animasi motion graphics yang merespons irama.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 px-4">
+                <a href="#projects" class="w-full sm:w-auto bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white px-8 py-3.5 rounded-full font-bold transition-all shadow-lg shadow-amber-900/40 flex items-center justify-center">
+                    <i class="fa-solid fa-eye mr-2.5 text-lg"></i>
+                    <span>Lihat Karya</span>
+                </a>
+                
+                <a href="#lab" class="w-full sm:w-auto glass hover:bg-stone-800 text-stone-200 px-8 py-3.5 rounded-full font-bold transition-all border border-stone-600 flex items-center justify-center group/btn">
+                    <i class="fa-solid fa-compact-disc mr-2.5 text-lg group-hover/btn:animate-spin"></i>
+                    <span>Coba Audio Lab</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 px-4 max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold mb-12 text-center uppercase tracking-widest text-stone-400">Tech Stack & Expertise</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="glass p-6 rounded-2xl text-center hover:-translate-y-2 transition-transform duration-300 group border border-stone-700/50">
+                <div class="text-4xl mb-4 text-amber-500 group-hover:scale-110 transition-transform"><i class="fa-solid fa-laptop-code icon-glow-amber"></i></div>
+                <h3 class="font-bold text-stone-200">Web Dev</h3>
+                <p class="text-xs text-stone-400 mt-2">JavaScript, PHP, Laravel</p>
+            </div>
+            <div class="glass p-6 rounded-2xl text-center hover:-translate-y-2 transition-transform duration-300 group border border-stone-700/50">
+                <div class="text-4xl mb-4 text-rose-500 group-hover:scale-110 transition-transform"><i class="fa-solid fa-video icon-glow-rose"></i></div>
+                <h3 class="font-bold text-stone-200">Broadcasting</h3>
+                <p class="text-xs text-stone-400 mt-2">Live Streaming, OBS, Routing</p>
+            </div>
+            <div class="glass p-6 rounded-2xl text-center hover:-translate-y-2 transition-transform duration-300 group border border-stone-700/50">
+                <div class="text-4xl mb-4 text-teal-500 group-hover:scale-110 transition-transform"><i class="fa-solid fa-wand-magic-sparkles icon-glow-teal"></i></div>
+                <h3 class="font-bold text-stone-200">Motion & Visual</h3>
+                <p class="text-xs text-stone-400 mt-2">After Effects, Music Spectrum</p>
+            </div>
+            <div class="glass p-6 rounded-2xl text-center hover:-translate-y-2 transition-transform duration-300 group border border-stone-700/50">
+                <div class="text-4xl mb-4 text-stone-400 group-hover:scale-110 transition-transform"><i class="fa-solid fa-graduation-cap icon-glow-stone"></i></div>
+                <h3 class="font-bold text-stone-200">EdTech</h3>
+                <p class="text-xs text-stone-400 mt-2">Educational Technology, UI/UX</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-20 px-4 max-w-6xl mx-auto border-t border-stone-800/50">
+        <h2 class="text-2xl font-bold mb-12 text-center uppercase tracking-widest text-stone-400">Selected Works</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            {% for p in projects %}
+            <div class="glass rounded-2xl overflow-hidden group border border-stone-700/50 hover:border-{{ p.color }}-500/50 transition-colors">
+                
+                <div class="h-48 bg-stone-900 flex items-center justify-center border-b border-stone-800 relative overflow-hidden">
+                    <img src="{{ p.icon }}" alt="{{ p.title }}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105 transform">
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-transparent opacity-80"></div>
+                </div>
+
+                <div class="p-5 relative">
+                    <div class="absolute -top-6 right-5 w-10 h-10 bg-stone-800 border border-stone-700 rounded-full flex items-center justify-center shadow-lg group-hover:-translate-y-1 transition-transform">
+                        <i class="{{ p.category_icon }} text-{{ p.color }}-400"></i>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-stone-100 mb-2 group-hover:text-{{ p.color }}-400 transition-colors">{{ p.title }}</h3>
+                    <p class="text-xs text-stone-400 mb-4 line-clamp-2">{{ p.description }}</p>
+                    <span class="text-[10px] border border-stone-600 px-2 py-1 rounded text-{{ p.color }}-300">
+                        {{ p.category }}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </section>
+
+    <section id="lab" class="py-20 px-4 max-w-6xl mx-auto border-t border-stone-800/50">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl font-bold uppercase tracking-widest text-stone-400">The Audio Lab</h2>
+            <p class="text-sm text-stone-500 mt-2 font-light">Eksperimen Web Audio API. Putar lagu dan saksikan warna senja bergetar di background!</p>
+        </div>
+        
+        <div class="glass p-6 rounded-3xl shadow-2xl border border-stone-700/50">
+            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-6">
+                <div class="relative w-full">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-stone-500"></i>
+                    <input type="text" id="search-input" placeholder="Cari artis atau lagu..." class="w-full bg-stone-900/80 border border-stone-700 rounded-xl pl-12 pr-4 py-3 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-colors placeholder-stone-600">
+                </div>
+                <button id="search-btn" class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-lg shadow-amber-900/30 whitespace-nowrap">
+                    Search Audio
+                </button>
+            </div>
+            
+            <div id="loading" class="hidden text-center text-amber-500 font-bold py-4 animate-pulse">
+                <i class="fa-solid fa-compact-disc animate-spin mr-2"></i>Mengambil frekuensi...
+            </div>
+            <div id="results-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 h-64 overflow-y-auto pr-2">
+                </div>
+        </div>
+    </section>
+
+    <footer class="glass border-t border-stone-800 mt-10">
+        <div class="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <span class="text-xl font-black tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-rose-400">
+                        <i class="fa-solid fa-code mr-2 text-amber-500"></i>RIDHO.Dev
+                    </span>
+                    <p class="mt-4 text-sm text-stone-400 font-light">Crafting digital experiences, live streams, and aesthetic web applications with passion.</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-stone-200 tracking-wider uppercase"><i class="fa-solid fa-compass mr-2 text-stone-500"></i>Navigation</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="#home" class="text-sm text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-solid fa-angle-right mr-1 text-[10px]"></i> Home</a></li>
+                        <li><a href="#projects" class="text-sm text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-solid fa-angle-right mr-1 text-[10px]"></i> Portfolio</a></li>
+                        <li><a href="#lab" class="text-sm text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-solid fa-angle-right mr-1 text-[10px]"></i> Audio Lab</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-stone-200 tracking-wider uppercase"><i class="fa-solid fa-link mr-2 text-stone-500"></i>Connect</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="#" class="text-sm text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram mr-2 w-4 text-center"></i>Instagram</a></li>
+                        <li><a href="#" class="text-sm text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-github mr-2 w-4 text-center"></i>GitHub</a></li>
+                        <li><a href="#" class="text-sm text-stone-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-linkedin mr-2 w-4 text-center"></i>LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-stone-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-xs text-stone-500">&copy; 2026 Ridho. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 flex items-center space-x-4">
+                    <audio id="audio-player" controls crossorigin="anonymous" class="h-8 w-48 opacity-40 hover:opacity-100 transition-opacity rounded grayscale hue-rotate-180 contrast-125"></audio>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- LOGIKA VISUALIZER BACKGROUND (WARNA SENJA/CIAMIK) ---
+        const canvas = document.getElementById('visualizer');
+        const ctx = canvas.getContext('2d');
+        const audioPlayer = document.getElementById('audio-player');
+        
+        let audioCtx, analyser, source, dataArray, bufferLength;
+        let isVisualizerInit = false;
+
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function initVisualizer() {
+            if (isVisualizerInit) return;
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            source = audioCtx.createMediaElementSource(audioPlayer);
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+
+            analyser.fftSize = 256;
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+            
+            isVisualizerInit = true;
+            animateVisualizer();
+        }
+
+        function animateVisualizer() {
+            requestAnimationFrame(animateVisualizer);
+            analyser.getByteFrequencyData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            let bassSum = 0; for(let i=0; i<5; i++) bassSum += dataArray[i];
+            const bassAvg = bassSum / 5;
+            const radius = (Math.min(centerX, centerY) * 0.5) + (bassAvg * 0.4);
+
+            for (let i = 0; i < bufferLength; i++) {
+                if(dataArray[i] === 0) continue;
+                const barHeight = dataArray[i] * 1.5;
+                const angle = (i / (bufferLength/1.5)) * Math.PI * 2;
+                
+                const x1 = centerX + Math.cos(angle) * radius;
+                const y1 = centerY + Math.sin(angle) * radius;
+                const x2 = centerX + Math.cos(angle) * (radius + barHeight);
+                const y2 = centerY + Math.sin(angle) * (radius + barHeight);
+
+                // Warna Ciamik: Senja (Earthy Orange, Gold, Rose)
+                const r = 220 + (barHeight / 5);   // Merah/Oranye tinggi
+                const g = 120 + (barHeight / 2);   // Kuning/Emas menyesuaikan beat
+                const b = 60;                      // Biru rendah
+                
+                ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.5)`;
+                ctx.lineWidth = 4; 
+                ctx.lineCap = 'round';
+
+                ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+            }
+        }
+
+        // --- LOGIKA ITUNES API ---
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+        const resultsGrid = document.getElementById('results-grid');
+        const loading = document.getElementById('loading');
+
+        async function cariData() {
+            const query = searchInput.value.trim();
+            if (!query) return;
+
+            resultsGrid.innerHTML = ''; loading.classList.remove('hidden');
+
+            try {
+                const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=10`);
+                const data = await response.json();
+                
+                if (data.results.length === 0) {
+                    resultsGrid.innerHTML = `<p class="text-stone-400 col-span-full text-center">Tidak ditemukan.</p>`;
+                    return;
+                }
+
+                data.results.forEach(item => {
+                    const imgUrl = item.artworkUrl100 ? item.artworkUrl100.replace('100x100bb', '300x300bb') : 'https://via.placeholder.com/300';
+                    const card = document.createElement('div');
+                    card.className = "bg-stone-800/40 rounded-xl overflow-hidden cursor-pointer hover:bg-stone-800 transition-all border border-stone-700/50 hover:border-amber-500/50 group relative";
+                    
+                    card.innerHTML = `
+                        <div class="relative">
+                            <img src="${imgUrl}" alt="Cover" class="w-full aspect-square object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-stone-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <i class="fa-solid fa-play text-3xl text-amber-400 drop-shadow-lg"></i>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-[12px] font-bold text-stone-200 truncate group-hover:text-amber-400 transition-colors">${item.trackName || 'Unknown'}</p>
+                            <p class="text-[10px] text-stone-400 truncate mt-1">${item.artistName || 'Unknown'}</p>
+                        </div>
+                    `;
+
+                    card.onclick = () => {
+                        if(!item.previewUrl) return alert("Preview tidak tersedia.");
+                        audioPlayer.src = item.previewUrl;
+                        audioPlayer.play();
+                        initVisualizer();
+                    };
+                    resultsGrid.appendChild(card);
+                });
+            } catch (error) {
+                resultsGrid.innerHTML = `<p class="text-rose-400 col-span-full text-center">Error: ${error.message}</p>`;
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
+
+        searchBtn.addEventListener('click', cariData);
+        searchInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') cariData(); });
+        
+        window.onload = () => { searchInput.value = "Sal Priadi"; cariData(); };
+
+        // Navbar effect on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) { nav.classList.add('shadow-lg', 'bg-stone-900/95'); nav.classList.remove('bg-transparent', 'border-transparent'); } 
+            else { nav.classList.remove('shadow-lg', 'bg-stone-900/95'); nav.classList.add('bg-transparent', 'border-transparent'); }
+        });
+    </script>
+</body>
+</html>
