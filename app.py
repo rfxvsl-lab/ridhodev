@@ -1,22 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 import re
 
 app = Flask(__name__)
+# KUNCI RAHASIA UNTUK KEAMANAN SESSION (Jangan dikasih tahu siapa-siapa)
+app.secret_key = 'arusdigital_rahasia_banget_2026'
 
 # --- BOT AUTO CONVERTER GOOGLE DRIVE ---
 def convert_gdrive_link(url):
-    # Jika link mengandung /file/d/ (Link Share biasa)
     match1 = re.search(r'/file/d/([a-zA-Z0-9_-]+)', url)
     if match1:
         return f"https://drive.google.com/uc?export=view&id={match1.group(1)}"
-    
-    # Jika link mengandung ?id=
     match2 = re.search(r'[?&]id=([a-zA-Z0-9_-]+)', url)
     if match2 and "uc?export=view" not in url:
         return f"https://drive.google.com/uc?export=view&id={match2.group(1)}"
-        
-    return url # Kalau bukan link GDrive, kembalikan apa adanya
+    return url
 
 def get_db_connection():
     conn = sqlite3.connect('portfolio.db')
@@ -34,23 +32,12 @@ def init_db():
                   category TEXT,
                   category_icon TEXT,
                   color TEXT)''')
-    
-    c.execute("SELECT COUNT(*) FROM projects")
-    if c.fetchone()[0] == 0:
-        # Data awal sekarang menggunakan Link Gambar, bukan Ikon FontAwesome
-        data_awal = [
-            ('Vorvox.id', 'Pengembangan company profile dan katalog digital elegan untuk perusahaan konveksi.', 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600', 'Web Dev', 'fa-brands fa-html5', 'amber'),
-            ('Arus Digital', 'Portofolio layanan live streaming event dengan visual yang responsif dan imersif.', 'https://images.unsplash.com/photo-1598550880863-4e8aa3d0edb4?w=600', 'Broadcasting', 'fa-solid fa-satellite-dish', 'rose'),
-            ('Wedding SaaS', 'Platform undangan digital dengan fitur dashboard builder dan manajemen template.', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'Laravel', 'fa-brands fa-laravel', 'teal'),
-            ('RFX Femmora', 'Integrasi layanan kreatif (RFX Visual) dengan sistem reseller premium.', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600', 'Integration', 'fa-solid fa-network-wired', 'amber'),
-            ('Expo Campuss 2026', 'Produksi video animasi promosi untuk memeriahkan acara pameran kampus sekolah.', 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600', 'Motion Graphics', 'fa-solid fa-clapperboard', 'rose')
-        ]
-        c.executemany("INSERT INTO projects (title, description, icon, category, category_icon, color) VALUES (?, ?, ?, ?, ?, ?)", data_awal)
-        conn.commit()
+    conn.commit()
     conn.close()
 
 init_db()
 
+# --- HALAMAN UTAMA ---
 @app.route('/')
 def home():
     conn = get_db_connection()
@@ -58,17 +45,46 @@ def home():
     conn.close()
     return render_template('index.html', projects=karya_karya)
 
+# --- HALAMAN LOGIN ---
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # Kalau sudah login, langsung lempar ke admin
+    if session.get('logged_in'):
+        return redirect(url_for('admin'))
+        
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # GANTI USERNAME DAN PASSWORD KAMU DI SINI
+        if username == 'admin' and password == 'ridho2026':
+            session['logged_in'] = True
+            return redirect(url_for('admin'))
+        else:
+            error = 'Username atau Password salah bos!'
+            
+    return render_template('login.html', error=error)
+
+# --- FUNGSI LOGOUT ---
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
+
+# --- HALAMAN ADMIN (DILINDUNGI) ---
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
+    # CEK KEAMANAN: Kalau belum login, tendang ke halaman login!
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
     conn = get_db_connection()
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
         icon_raw = request.form['icon'] 
-        
-        # PROSES CONVERTER BOT BERJALAN DI SINI
         icon_converted = convert_gdrive_link(icon_raw)
-        
         category = request.form['category']
         category_icon = request.form['category_icon']
         color = request.form['color']
@@ -82,8 +98,13 @@ def admin():
     conn.close()
     return render_template('admin.html', projects=karya_karya)
 
+# --- FITUR HAPUS (DILINDUNGI) ---
 @app.route('/delete/<int:id>')
 def delete(id):
+    # CEK KEAMANAN: Tendang kalau belum login
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
     conn = get_db_connection()
     conn.execute('DELETE FROM projects WHERE id = ?', (id,))
     conn.commit()
